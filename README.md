@@ -2,7 +2,6 @@
 # Laboratorio 4 — Operaciones extendidas en FHIR con API Gateway (Nginx)
 
 Este laboratorio demuestra el uso de la operación **`$validate`** de FHIR en un servidor **HAPI FHIR** y la integración con un **API Gateway (Nginx)** para aplicar **rate limiting**.  
-Se utilizó **Nginx** en lugar de Kong, ya que es más ligero y adecuado para entornos con recursos limitados (ej. VM con 6 GB RAM).
 
 ---
 
