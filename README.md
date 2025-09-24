@@ -41,3 +41,32 @@ Se utilizó **Nginx** en lugar de Kong, ya que es más ligero y adecuado para en
     "value": "ABC"
   }
 }
+El campo "ABC" es inválido porque debería ser numérico.
+
+2. Probar $validate directamente en HAPI
+
+curl -i -X POST "http://127.0.0.1:8081/fhir/Observation/$validate" \
+     -H "Content-Type: application/fhir+json" \
+     -d @observation-invalid.json
+
+📌 Resultado esperado:
+HTTP 400 con un recurso OperationOutcome indicando que "ABC" no es válido.
+
+3. Configurar Nginx como API Gateway
+En nginx.conf (dentro de http { ... }):
+
+limit_req_zone $binary_remote_addr zone=fhir:10m rate=3r/m;
+
+En /etc/nginx/sites-available/fhir.conf:
+
+server {
+    listen 8090;
+
+    location /fhir/ {
+        proxy_pass http://127.0.0.1:8081/fhir/;
+        proxy_set_header Host $host;
+
+        limit_req zone=fhir burst=1 nodelay;
+    }
+}
+
